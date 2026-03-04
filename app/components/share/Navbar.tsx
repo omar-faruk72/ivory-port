@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation"; 
+import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 
 const navLinks = [
@@ -27,12 +27,12 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   
-  const pathname = usePathname(); 
-
+  const pathname = usePathname();
   const isActive = (path: string) => pathname === path;
 
   return (
     <header className="relative w-full h-[600px] flex flex-col items-center overflow-hidden">
+      {/* Background Section */}
       <div className="absolute inset-0 -z-10">
         <Image
           src="/assets/image/hero-bg.avif" 
@@ -45,6 +45,7 @@ const Navbar = () => {
       </div>
 
       <nav className="w-full max-w-7xl px-6 md:px-10 py-6 flex items-center justify-between z-50">
+        {/* Logo */}
         <div className="logo shrink-0">
           <Link href="/">
             <Image 
@@ -97,8 +98,29 @@ const Navbar = () => {
               </li>
             );
           })}
+
+          {/* Login & Register Buttons (Desktop) */}
+          <div className="flex items-center gap-3 ml-4">
+            <Link 
+              href="/login" 
+              className={`px-5 py-2 border rounded transition ${
+                isActive("/login") ? "bg-white text-black border-white" : "border-white/50 text-white hover:bg-white hover:text-black"
+              }`}
+            >
+              Login
+            </Link>
+            <Link 
+              href="/register" 
+              className={`px-5 py-2 rounded transition shadow-lg ${
+                isActive("/register") ? "bg-cyan-600 text-white" : "bg-cyan-500 text-white hover:bg-cyan-600"
+              }`}
+            >
+              Register
+            </Link>
+          </div>
         </ul>
 
+        {/* Mobile Hamburger Icon */}
         <div className="lg:hidden text-white cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
           {isOpen ? <X size={32} /> : <Menu size={32} />}
         </div>
@@ -135,8 +157,27 @@ const Navbar = () => {
             )}
           </div>
         ))}
+
+        {/* Login & Register Buttons (Mobile) */}
+        <div className="flex flex-col gap-4 w-full px-10 mt-6">
+          <Link 
+            href="/login" 
+            onClick={() => setIsOpen(false)} 
+            className={`w-full py-3 border text-center rounded ${isActive("/login") ? "bg-white text-black" : "border-white/30 text-white"}`}
+          >
+            Login
+          </Link>
+          <Link 
+            href="/register" 
+            onClick={() => setIsOpen(false)} 
+            className={`w-full py-3 text-center rounded shadow-lg ${isActive("/register") ? "bg-cyan-600 text-white" : "bg-cyan-500 text-white"}`}
+          >
+            Register
+          </Link>
+        </div>
       </div>
 
+      {/* Hero Content */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6 z-10">
         <h1 className="text-3xl md:text-5xl lg:text-7xl font-extrabold text-white leading-tight">
           Transforming Smiles With <br />
