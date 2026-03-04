@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Navbar from "./components/share/Navbar";
-import Footer from "./components/share/Footer";
+import "./globals.css"; // পাথ ঠিক রাখুন
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -21,12 +19,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} antialiased`}
-      >
-        <Navbar></Navbar>
-        {children}
-        <Footer></Footer>
+      <body className={`${inter.className} antialiased`}>
+        {children} {/* এখানে নেভবার/ফুটার থাকবে না */}
       </body>
     </html>
   );
