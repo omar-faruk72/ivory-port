@@ -108,7 +108,7 @@ const RegisterPage = () => {
       <div className="hidden lg:block relative bg-[#f8fafc]">
         <div className="absolute inset-0 bg-[#86B1AA]/10 z-10"></div>
         <Image 
-          src="/assets/image/register-bg.jpg"
+          src="/assets/image/register.png"
           alt="Clinic environment"
           fill
           className="object-cover"
