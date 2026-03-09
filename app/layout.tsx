@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css"; // পাথ ঠিক রাখুন
+import Providers from "./providers/providers";
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased`}>
-        {children} {/* এখানে নেভবার/ফুটার থাকবে না */}
+        <Providers>
+          {children} 
+        </Providers>
       </body>
     </html>
   );
