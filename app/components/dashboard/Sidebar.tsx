@@ -18,31 +18,36 @@ import {
 const Sidebar = () => {
   const pathname = usePathname();
 
+  // স্ক্রিনশট অনুযায়ী সকল মেনু আইটেম
   const menuItems = [
     { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
     { name: 'Booking', icon: CalendarCheck, href: '/dashboard/booking' },
     { name: 'Contact', icon: Mail, href: '/dashboard/contact' },
     { name: 'Treatment List', icon: ListTodo, href: '/dashboard/treatment-list' },
     { name: 'Price List', icon: BadgeDollarSign, href: '/dashboard/price-list' },
+    { name: 'Gallery Management', icon: ImageIcon, href: '/dashboard/gallery' }, // নতুন যুক্ত
+    { name: 'FAQ', icon: HelpCircle, href: '/dashboard/faq' }, // নতুন যুক্ত
+    { name: 'Settings', icon: Settings, href: '/dashboard/settings' }, // নতুন যুক্ত
   ];
 
   return (
-    <div className="flex flex-col h-full bg-white text-gray-600 border-r">
+    <div className="flex flex-col h-full bg-white text-gray-600 border-r shadow-sm">
+      {/* Logo Section */}
       <div className="p-6 mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-[#7AB7A9] rounded-full flex items-center justify-center text-white font-bold">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 bg-[#7AB7A9] rounded-xl flex items-center justify-center text-white font-bold shadow-md shadow-[#7AB7A9]/20">
             P
           </div>
           <span className="text-lg font-bold text-gray-800 leading-tight">
-            Perrystown <br /> <span className="text-sm font-medium">Orthodontics</span>
+            Perrystown <br /> 
+            <span className="text-xs font-semibold text-[#7AB7A9] uppercase tracking-wider">Orthodontics</span>
           </span>
         </div>
       </div>
 
-      <nav className="flex-1 px-4 space-y-1">
+      {/* Navigation Links */}
+      <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto custom-scrollbar">
         {menuItems.map((item) => {
-          // লজিক: যদি হোম ড্যাশবোর্ড হয় তবে একদম সঠিক মিল (Exact match) লাগবে, 
-          // অন্যথায় যদি সাব-পেজ থাকে (যেমন /treatment-list/add) তবে startsWith কাজ করবে।
           const isActive = item.href === '/dashboard' 
             ? pathname === '/dashboard' 
             : pathname.startsWith(item.href);
@@ -51,17 +56,19 @@ const Sidebar = () => {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all group ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${
                 isActive 
-                ? "bg-[#EAF4F2] text-[#7AB7A9] font-medium" 
-                : "hover:bg-gray-50 text-gray-400"
+                ? "bg-[#EAF4F2] text-[#7AB7A9] font-semibold shadow-sm" 
+                : "hover:bg-gray-50 text-gray-500"
               }`}
             >
               <item.icon 
                 size={20} 
-                className={isActive ? "text-[#7AB7A9]" : "text-gray-400 group-hover:text-gray-600"} 
+                className={`transition-colors ${
+                  isActive ? "text-[#7AB7A9]" : "text-gray-400 group-hover:text-gray-600"
+                }`} 
               />
-              <span className={`text-[15px] ${isActive ? "text-[#7AB7A9]" : "text-gray-500"}`}>
+              <span className="text-[14px]">
                 {item.name}
               </span>
             </Link>
@@ -69,10 +76,11 @@ const Sidebar = () => {
         })}
       </nav>
 
-      <div className="p-4 border-t">
-        <button className="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 rounded-lg transition-colors group">
-          <LogOut size={20} className="text-red-400 group-hover:text-red-500" />
-          <span className="text-[15px] font-medium">LogOut</span>
+      {/* Logout Section */}
+      <div className="p-4 border-t border-gray-100 bg-gray-50/50">
+        <button className="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300 group">
+          <LogOut size={20} className="text-red-400 group-hover:text-red-500 group-hover:translate-x-1 transition-transform" />
+          <span className="text-[14px] font-semibold">Logout</span>
         </button>
       </div>
     </div>
