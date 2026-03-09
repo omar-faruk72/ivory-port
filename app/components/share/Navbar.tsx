@@ -11,7 +11,7 @@ const navLinks = [
   { name: "Treatments", href: "/treatments" },
   { 
     name: "Pricing", 
-    href: "#", 
+    href: "pricing", 
     dropdown: [
       { name: "Fees", href: "/pricing/fees" },
       { name: "Offers & Payment Plans", href: "/pricing/offers-plans" }
