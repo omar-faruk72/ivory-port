@@ -20,7 +20,7 @@ export default function FAQSection() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["all-faqs", currentPage],
     queryFn: async () => {
-      const res = await axiosPublic.get(`/all-faqs?page=${currentPage}&limit=10`);
+      const res = await axiosPublic.get(`/faq/all-faqs?page=${currentPage}&limit=10`);
       return res.data;
     },
   });
