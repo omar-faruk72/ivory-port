@@ -12,7 +12,7 @@ const GalleryPage = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["public-gallery"],
     queryFn: async () => {
-      const res = await axiosPublic.get("/all-gallery?limit=10"); // ১০টি ডেটা লোড হচ্ছে
+      const res = await axiosPublic.get("/gallery/all-gallery?limit=10"); // ১০টি ডেটা লোড হচ্ছে
       return res.data;
     },
   });
