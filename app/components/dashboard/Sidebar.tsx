@@ -14,6 +14,7 @@ import {
   Settings, 
   LogOut 
 } from 'lucide-react';
+import Image from 'next/image';
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -35,13 +36,15 @@ const Sidebar = () => {
       {/* Logo Section */}
       <div className="p-6 mb-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-[#7AB7A9] rounded-xl flex items-center justify-center text-white font-bold shadow-md shadow-[#7AB7A9]/20">
-            P
-          </div>
-          <span className="text-lg font-bold text-gray-800 leading-tight">
-            Perrystown <br /> 
-            <span className="text-xs font-semibold text-[#7AB7A9] uppercase tracking-wider">Orthodontics</span>
-          </span>
+         <Link href={"/"}>
+         <Image 
+         src={"/assets/image/dashboar-logo.png"}
+         width={134}
+         height={34}
+         alt='dashboar logo'
+         className='w-full h-full'
+         />
+         </Link>
         </div>
       </div>
 
