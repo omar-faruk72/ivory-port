@@ -20,7 +20,7 @@ export default function TreatmentFeesPage() {
   const { data: fees, isLoading } = useQuery({
     queryKey: ['treatment-fees'],
     queryFn: async () => {
-      const res = await axiosPublic.get('/all-treatments');
+      const res = await axiosPublic.get('/treatment/all-treatments');
       // আপনার API রেসপন্স অনুযায়ী ডাটা রিটার্ন করা হচ্ছে
       return res.data?.data as FeeItem[];
     }
@@ -35,7 +35,7 @@ export default function TreatmentFeesPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12 space-y-12 bg-white">
+    <div className="max-w-6xl mx-auto px-4 py-12 space-y-12">
       
       {/* Header Section */}
       <div className="space-y-4 text-center md:text-left">

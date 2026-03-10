@@ -37,7 +37,7 @@ const offers = [
 
 export default function OffersPage() {
   return (
-    <div className="p-6 bg-gray-50 min-h-screen space-y-8">
+    <div className="p-6 bg-gray-50 max-w-6xl mx-auto px-4 space-y-8">
       
       {/* Header Section */}
       <div className="space-y-2">
