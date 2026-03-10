@@ -25,7 +25,7 @@ export default function AddFAQPage() {
   // Mutation logic for posting data
   const { mutate, isPending } = useMutation({
     mutationFn: async (newFaq: { question: string; answer: string }) => {
-      const res = await axiosPublic.post('/faqs', newFaq);
+      const res = await axiosPublic.post('/faq/faqs', newFaq);
       return res.data;
     },
     onSuccess: () => {
