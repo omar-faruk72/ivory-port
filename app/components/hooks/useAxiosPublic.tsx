@@ -4,7 +4,7 @@ import axios from "axios";
 
 const axiosPublic = axios.create({
   // আপনার সার্ভারের বেস ইউআরএল এখানে দিন
-  baseURL: "http://localhost:8000", 
+  baseURL: "http://localhost:8000/api", 
 });
 
 const useAxiosPublic = () => {
