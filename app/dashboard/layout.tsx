@@ -1,6 +1,7 @@
 // app/(dashboard)/layout.tsx
 
 import Sidebar from "../components/dashboard/Sidebar";
+import AdminRoute from "../components/hooks/AdminRoute";
 
 
 export default function DashboardLayout({
@@ -9,7 +10,8 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen bg-gray-50/50">
+    <AdminRoute>
+      <div className="flex h-screen bg-gray-50/50">
       {/* বাম পাশের সাইডবার */}
       <aside className="w-64 border-r bg-white h-full fixed left-0 top-0 overflow-y-auto">
         <Sidebar />
@@ -20,5 +22,6 @@ export default function DashboardLayout({
         {children}
       </main>
     </div>
+    </AdminRoute>
   );
 }
