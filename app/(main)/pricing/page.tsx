@@ -6,13 +6,13 @@ import { CreditCard, Banknote, ArrowRight } from 'lucide-react';
 export default function PriceListPage() {
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen space-y-10">
+    <div className="p-6 bg-gray-50 space-y-10 my-10">
       
       {/* Header Section */}
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row items-center gap-10">
         <div className="relative w-full md:w-1/2 h-[300px] rounded-2xl overflow-hidden shadow-lg">
           <Image 
-            src="https://res.cloudinary.com/dn5t9fhya/image/upload/v1772957227/glowly_uploads/fskgdprijs3g53tvg2s0.jpg" 
+            src="https://res.cloudinary.com/dn5t9fhya/image/upload/v1773125488/05e69f864c32a23351c67e946dddd8887a2cfb72_d1uqn3.jpg" 
             alt="Fees and Payment"
             fill
             className="object-cover"
