@@ -41,7 +41,7 @@ const OrthodonticServices = () => {
     queryKey: ['services', currentPage],
     queryFn: async () => {
       // /all-services এন্ডপয়েন্ট থেকে ডাটা লোড হচ্ছে
-      const res = await axiosPublic.get(`/all-services?page=${currentPage}&limit=${limit}`);
+      const res = await axiosPublic.get(`/services/all-services?page=${currentPage}&limit=${limit}`);
       return res.data;
     },
   });
