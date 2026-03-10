@@ -74,7 +74,7 @@ export default function AddGalleryPage() {
         image: imageUrl 
       };
 
-      const res = await axiosPublic.post('/add-gallery', finalData);
+      const res = await axiosPublic.post('/gallery/add-gallery', finalData);
       
       if (res.data.success) {
         Swal.fire("Success!", "Gallery item saved successfully.", "success");

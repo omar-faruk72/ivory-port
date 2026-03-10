@@ -91,7 +91,7 @@ const AddTreatmentPage = () => {
       };
 
       // ৩. Axios দিয়ে ডাটা পোস্ট করা
-      const response = await axiosPublic.post('/add-service', payload);
+      const response = await axiosPublic.post('/services/add-service', payload);
 
       if (response.data.insertedId) {
         console.log("%c--- Data Saved to DB ---", "color: #7AB7A9; font-weight: bold;");

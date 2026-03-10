@@ -31,7 +31,7 @@ export default function AddPriceListPage() {
   // Mutation logic
   const { mutate, isPending } = useMutation({
     mutationFn: async (newPrice: typeof formData) => {
-      const res = await axiosPublic.post('/add-treatments', newPrice);
+      const res = await axiosPublic.post('/treatment/add-treatments', newPrice);
       return res.data;
     },
     onSuccess: () => {
