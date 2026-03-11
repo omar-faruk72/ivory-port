@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react'; // Suspense যোগ করা হয়েছে
 import { useSearchParams, useRouter } from 'next/navigation';
 import useAxiosPublic from "@/app/components/hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import { Loader2 } from 'lucide-react';
 
-const VerifyOTP = () => {
+// ১. মূল ভেরিফিকেশন লজিক ও UI আলাদা কম্পোনেন্টে
+const VerifyOTPForm = () => {
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
   const router = useRouter();
@@ -23,7 +24,7 @@ const VerifyOTP = () => {
       const res = await axiosPublic.post("/auth/verify-otp", { email, otp });
       if (res.data.success) {
         Swal.fire("Verified!", "Now set your new password", "success");
-        // OTP ভেরিফাই হলে নতুন পাসওয়ার্ড পেজে পাঠিয়ে দেওয়া
+        // OTP ভেরিফাই হলে নতুন পাসওয়ার্ড পেজে পাঠিয়ে দেওয়া
         router.push(`/reset-password?email=${email}&token=${res.data.token}`);
       }
     } catch (err: any) {
@@ -60,4 +61,20 @@ const VerifyOTP = () => {
   );
 };
 
-export default VerifyOTP;
+// ২. মেইন এক্সপোর্ট ফাংশন যা Suspense Boundary নিশ্চিত করবে
+const VerifyOTPPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <Loader2 className="animate-spin text-[#86B1AA] mx-auto" size={40} />
+          <p className="mt-2 text-slate-500 font-medium">Loading Verification Page...</p>
+        </div>
+      </div>
+    }>
+      <VerifyOTPForm />
+    </Suspense>
+  );
+};
+
+export default VerifyOTPPage;
