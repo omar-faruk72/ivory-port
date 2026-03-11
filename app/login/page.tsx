@@ -1,4 +1,6 @@
 "use client";
+
+import React, { useState, Suspense } from "react"; // Suspense যোগ করা হয়েছে
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Lock, ArrowRight, Home, Loader2 } from "lucide-react";
@@ -7,29 +9,26 @@ import useAxiosPublic from "@/app/components/hooks/useAxiosPublic";
 import { useAuth } from "@/app/providers/AuthProvider";
 import { useRouter, useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
-import { useState } from "react";
 
-const LoginPage = () => {
+// ১. আমরা লগইন ফর্মের মূল অংশটি একটি আলাদা কম্পোনেন্টে নিয়ে আসলাম
+const LoginFormContent = () => {
   const axiosPublic = useAxiosPublic();
   const { setUser } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams(); // এটিই মূলত বিল্ড এরর তৈরি করছিল
   const [loading, setLoading] = useState(false);
 
   const redirectTo = searchParams.get("redirect") || "/";
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: unknown) => {
     setLoading(true);
     try {
       const res = await axiosPublic.post("/auth/login", data);
  
       if (res.data.success) {
-        
         localStorage.setItem("access-token", res.data?.data?.token);
-        
-        // ২. AuthContext এ ইউজার সেট করা
         setUser(res.data.data.user);
 
         Swal.fire({
@@ -41,11 +40,11 @@ const LoginPage = () => {
 
         router.push(redirectTo); 
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       Swal.fire({
         icon: "error",
         title: "Login Failed",
-        text: err.response?.data?.message || "Invalid email or password",
+        text: (err as { response?: { data?: { message?: string } } }).response?.data?.message || "Invalid email or password",
       });
     } finally {
       setLoading(false);
@@ -118,12 +117,27 @@ const LoginPage = () => {
         </div>
       </div>
 
-      {/* Right Side Visuals */}
       <div className="hidden lg:block relative overflow-hidden">
         <Image src="/assets/image/login.jpg" alt="Clinic" fill className="object-cover" priority />
         <div className="absolute inset-0 bg-gradient-to-t from-[#86B1AA]/40 to-transparent z-10"></div>
       </div>
     </div>
+  );
+};
+
+// ২. মেইন পেজ কম্পোনেন্ট, যা LoginFormContent কে Suspense এর ভেতরে র‍্যাপ করবে
+const LoginPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="animate-spin text-[#86B1AA]" size={48} />
+          <p className="text-slate-500 font-medium animate-pulse">Loading Login Page...</p>
+        </div>
+      </div>
+    }>
+      <LoginFormContent />
+    </Suspense>
   );
 };
 
