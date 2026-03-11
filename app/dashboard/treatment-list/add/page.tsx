@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { ImagePlus, Plus, Save, Loader2, AlertCircle } from 'lucide-react';
-
+import { useRouter } from 'next/navigation'; // রিডাইরেক্টের জন্য
+import Swal from 'sweetalert2'; // সুন্দর অ্যালার্টের জন্য
 
 // Quill Editor dynamic import
 const ReactQuill = dynamic(() => import('react-quill-new'), { 
@@ -16,6 +17,7 @@ import useAxiosPublic from '@/app/components/hooks/useAxiosPublic';
 
 const AddTreatmentPage = () => {
   const axiosPublic = useAxiosPublic();
+  const router = useRouter(); // হুক কল করা হলো
   const [serviceName, setServiceName] = useState('');
   const [sections, setSections] = useState(() => [
     { id: Date.now(), title: '', description: '', image: null as File | null, preview: '', cloudinaryUrl: '' }
@@ -41,10 +43,10 @@ const AddTreatmentPage = () => {
     setSections([...sections, { id: Date.now(), title: '', description: '', image: null, preview: '', cloudinaryUrl: '' }]);
   };
 
-  // Cloudinary Upload Logic with Type Safety
+  // Cloudinary Upload Logic (এটি এখন আরও ফাস্ট কাজ করবে)
   const uploadToCloudinary = async (file: File) => {
     if (!CLOUDINARY_UPLOAD_PRESET || !CLOUDINARY_CLOUD_NAME) {
-      throw new Error("Cloudinary config is missing in .env.local");
+      throw new Error("Cloudinary config is missing in environment variables.");
     }
 
     const formData = new FormData();
@@ -66,39 +68,45 @@ const AddTreatmentPage = () => {
     setIsUploading(true);
 
     try {
+      // ১. বেসিক ভ্যালিডেশন
       if (!serviceName.trim()) throw new Error("Service Name is required.");
-
-      const updatedSections = [...sections];
-
-      // ১. ক্লাউডিনারিতে সব ইমেজ আপলোড করা
-      for (let i = 0; i < updatedSections.length; i++) {
-        const section = updatedSections[i];
+      
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i];
         if (!section.title.trim() || !section.description || section.description === '<p><br></p>' || !section.image) {
-          throw new Error(`Please fill all fields in Section ${i + 1}.`);
+          throw new Error(`Please fill all fields and select an image for Section ${i + 1}.`);
         }
-        const url = await uploadToCloudinary(section.image);
-        updatedSections[i].cloudinaryUrl = url;
       }
 
-      // ২. ডাটা অবজেক্ট তৈরি
+      // ২. প্যারালাল ইমেজ আপলোড (Parallel Uploading)
+      // এতে সব ইমেজ একসাথে আপলোড শুরু হবে, ফলে লোগিং টাইম অনেক কমে যাবে।
+      const uploadPromises = sections.map(section => uploadToCloudinary(section.image as File));
+      const uploadedUrls = await Promise.all(uploadPromises);
+
+      // ৩. ডাটা পেলোড তৈরি
       const payload = {
         serviceName,
-        treatments: updatedSections.map(s => ({
+        treatments: sections.map((s, index) => ({
           title: s.title,
           description: s.description,
-          imageUrl: s.cloudinaryUrl
+          imageUrl: uploadedUrls[index] // আপলোড হওয়া URL গুলো ইনডেক্স অনুযায়ী সেট করা
         }))
       };
 
-      // ৩. Axios দিয়ে ডাটা পোস্ট করা
+      // ৪. ডাটাবেসে সেভ করা
       const response = await axiosPublic.post('/services/add-service', payload);
 
-      if (response.data.insertedId) {
-        console.log("%c--- Data Saved to DB ---", "color: #7AB7A9; font-weight: bold;");
-        alert("Success! Treatment added to database.");
-        // সফল হলে ফর্ম রিসেট
-        setServiceName('');
-        setSections([{ id: Date.now(), title: '', description: '', image: null, preview: '', cloudinaryUrl: '' }]);
+      if (response.data.insertedId || response.data.success) {
+        await Swal.fire({
+          icon: "success",
+          title: "Treatment Added!",
+          text: "Data has been saved successfully.",
+          timer: 1500,
+          showConfirmButton: false
+        });
+
+        // ৫. অটোমেটিক রিডাইরেক্ট
+        router.push('/dashboard/treatment-list');
       }
       
     } catch (err: unknown) {
@@ -114,6 +122,7 @@ const AddTreatmentPage = () => {
 
   return (
     <div className="space-y-6 max-w-[1200px] mx-auto pb-10 px-4">
+      {/* Header Section */}
       <div className="bg-white px-8 py-6 rounded-2xl border border-gray-100 shadow-sm mt-6">
         <h1 className="text-[22px] font-semibold text-gray-900">Add New Treatment</h1>
         <nav className="flex items-center gap-2 text-[13px] mt-1 text-gray-400 font-medium">
@@ -125,6 +134,7 @@ const AddTreatmentPage = () => {
         </nav>
       </div>
 
+      {/* Error Alert */}
       {errors && (
         <div className="bg-red-50 border border-red-100 p-4 rounded-xl flex items-center gap-3 animate-in fade-in">
           <AlertCircle className="text-red-500" size={20} />
@@ -132,6 +142,7 @@ const AddTreatmentPage = () => {
         </div>
       )}
 
+      {/* Form Content */}
       <div className="bg-white p-8 rounded-2xl border border-gray-100 shadow-sm space-y-8">
         <div className="space-y-2">
           <label className="text-[15px] font-bold text-gray-700">Service Name *</label>
@@ -190,6 +201,7 @@ const AddTreatmentPage = () => {
           </div>
         ))}
 
+        {/* Action Buttons */}
         <div className="space-y-4 pt-4">
           <button 
             onClick={addMoreDescription} 
@@ -206,7 +218,7 @@ const AddTreatmentPage = () => {
             className="w-full py-4 bg-[#7AB7A9] text-white rounded-xl font-bold flex items-center justify-center gap-3 hover:bg-[#68a093] transition-all disabled:opacity-50 shadow-lg"
           >
             {isUploading ? <Loader2 className="animate-spin" /> : <Save size={20} />}
-            {isUploading ? "Processing & Saving..." : "Final Save to Database"}
+            {isUploading ? "Uploading & Saving..." : "Final Save to Database"}
           </button>
         </div>
       </div>
