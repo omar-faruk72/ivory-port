@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Loader2, Stethoscope, CheckCircle2 } from 'lucide-react';
 import useAxiosPublic from '@/app/components/hooks/useAxiosPublic';
+import Link from 'next/link';
 
 // ইন্টারফেস সেটআপ
 interface Treatment {
@@ -108,25 +109,25 @@ const SingleServicePage = () => {
             </div>
 
             {/* Content Section */}
-            <div className="w-full md:w-1/2 space-y-5">
-              <div className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#7AB7A9] text-white font-black text-sm">
-                  {index + 1}
-                </span>
-                <h2 className="text-2xl font-bold text-gray-800">{step.title}</h2>
-              </div>
-              
-              {/* Quill Description Render */}
-              <div 
-                className="text-gray-600 leading-relaxed text-lg prose prose-teal max-w-none"
-                dangerouslySetInnerHTML={{ __html: step.description }}
-              />
-              
-              <div className="pt-4 flex items-center gap-2 text-[#7AB7A9] font-semibold">
-                <CheckCircle2 size={20} />
-                <span>Professional Clinical Standard</span>
-              </div>
-            </div>
+<div className="w-full md:w-1/2 space-y-5 overflow-hidden"> {/* overflow-hidden যোগ করা হয়েছে */}
+  <div className="flex items-center gap-3">
+    <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#7AB7A9] text-white font-black text-sm shrink-0">
+      {index + 1}
+    </span>
+    <h2 className="text-2xl font-bold text-gray-800 break-words">{step.title}</h2>
+  </div>
+  
+  {/* Quill Description Render - updated classes */}
+  <div 
+    className="text-gray-600 leading-relaxed text-lg prose prose-teal max-w-full break-words overflow-wrap-anywhere overflow-hidden"
+    dangerouslySetInnerHTML={{ __html: step.description }}
+  />
+  
+  <div className="pt-4 flex items-center gap-2 text-[#7AB7A9] font-semibold">
+    <CheckCircle2 size={20} className="shrink-0" />
+    <span>Professional Clinical Standard</span>
+  </div>
+</div>
           </div>
         ))}
       </div>
@@ -139,9 +140,9 @@ const SingleServicePage = () => {
             <p className="text-[#EAF4F2] text-lg max-w-xl mx-auto opacity-90">
               Schedule a consultation for {data.serviceName} and let our experts guide you to a perfect smile.
             </p>
-            <button className="bg-white text-[#7AB7A9] px-10 py-4 rounded-full font-extrabold text-lg hover:bg-gray-100 transition-all active:scale-95 shadow-lg">
+            <Link href="/booking" className="bg-white text-[#7AB7A9] px-10 py-4 rounded-full font-extrabold text-lg hover:bg-gray-100 transition-all active:scale-95 shadow-lg">
               Book an Appointment
-            </button>
+            </Link>
           </div>
           {/* Decorative Circle */}
           <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
