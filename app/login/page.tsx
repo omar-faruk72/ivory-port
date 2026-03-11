@@ -1,12 +1,11 @@
 "use client";
-
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Lock, ArrowRight, Home, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "@/app/components/hooks/useAxiosPublic";
 import { useAuth } from "@/app/providers/AuthProvider";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
 import { useState } from "react";
 
@@ -14,7 +13,10 @@ const LoginPage = () => {
   const axiosPublic = useAxiosPublic();
   const { setUser } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
+
+  const redirectTo = searchParams.get("redirect") || "/";
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -22,9 +24,9 @@ const LoginPage = () => {
     setLoading(true);
     try {
       const res = await axiosPublic.post("/auth/login", data);
-      console.log(res.data.data.user)
+ 
       if (res.data.success) {
-        // ১. localStorage এ টোকেন সেভ করা
+        
         localStorage.setItem("access-token", res.data?.data?.token);
         
         // ২. AuthContext এ ইউজার সেট করা
@@ -37,7 +39,7 @@ const LoginPage = () => {
           timer: 1500
         });
 
-        router.push("/"); // লগইন শেষে হোম পেজে পাঠানো
+        router.push(redirectTo); 
       }
     } catch (err: any) {
       Swal.fire({

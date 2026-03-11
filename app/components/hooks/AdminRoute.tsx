@@ -1,13 +1,14 @@
 "use client";
 
 import { useAuth } from "@/app/providers/AuthProvider";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation"; // usePathname যোগ করুন
 import { useEffect } from "react";
 import Swal from "sweetalert2";
 
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const pathname = usePathname(); // বর্তমান পেজের পাথ (যেমন: /dashboard)
 
   useEffect(() => {
     if (!loading && !user) {
@@ -16,10 +17,10 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
         title: "Access Denied",
         text: "Please login first to access this page.",
       });
-      router.push("/login");
+      // লগইন পেজে পাঠানোর সময় বর্তমান পাথটি redirect প্যারামিটারে পাঠিয়ে দিন
+      router.push(`/login?redirect=${pathname}`);
     }
 
-    // যদি ইউজার থাকে কিন্তু সে অ্যাডমিন না হয়
     if (!loading && user && user.role !== "admin") {
       Swal.fire({
         icon: "error",
@@ -28,7 +29,7 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
       });
       router.push("/"); 
     }
-  }, [user, loading, router]);
+  }, [user, loading, router, pathname]);
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">

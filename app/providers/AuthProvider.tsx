@@ -47,11 +47,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   fetchUser();
 }, [axiosPublic]);
 
-  const logout = () => {
-    localStorage.removeItem("access-token");
-    setUser(null);
-  };
-
+ const logout = () => {
+  localStorage.removeItem("access-token");
+  setUser(null);
+  
+  // উইন্ডো লোকেশন থেকে বর্তমান পাথটি নিয়ে লগইন পেজে পাঠানো
+  if (typeof window !== "undefined") {
+    const currentPath = window.location.pathname;
+    window.location.href = `/login?redirect=${currentPath}`;
+  }
+};
   return (
     <AuthContext.Provider value={{ user, setUser, loading, logout }}>
       {children}

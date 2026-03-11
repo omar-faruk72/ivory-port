@@ -15,10 +15,11 @@ import {
   LogOut 
 } from 'lucide-react';
 import Image from 'next/image';
+import { useAuth } from '@/app/providers/AuthProvider';
 
 const Sidebar = () => {
   const pathname = usePathname();
-
+ const { logout  } = useAuth();
   // স্ক্রিনশট অনুযায়ী সকল মেনু আইটেম
   const menuItems = [
     { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
@@ -81,7 +82,12 @@ const Sidebar = () => {
 
       {/* Logout Section */}
       <div className="p-4 border-t border-gray-100 bg-gray-50/50">
-        <button className="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300 group">
+        <button 
+        onClick={() => {
+              logout();
+              
+            }}
+        className="flex items-center gap-3 px-4 py-3 w-full text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300 group">
           <LogOut size={20} className="text-red-400 group-hover:text-red-500 group-hover:translate-x-1 transition-transform" />
           <span className="text-[14px] font-semibold">Logout</span>
         </button>
