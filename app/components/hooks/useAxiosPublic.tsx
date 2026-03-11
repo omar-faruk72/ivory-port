@@ -3,7 +3,7 @@
 import axios from "axios";
 
 const axiosPublic = axios.create({
-  baseURL: "http://localhost:8000/api",
+  baseURL: "https://ivory-port-server.vercel.app/api",
 });
 
 // সরাসরি ইন্টারসেপ্টর ব্যবহার করুন (useEffect ছাড়া)
