@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react'; // Suspense যোগ করা হয়েছে
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Lock, ArrowRight, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import useAxiosPublic from "@/app/components/hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 
-const ResetPassword = () => {
+// ১. লজিক এবং UI পার্টটি আলাদা কম্পোনেন্টে
+const ResetPasswordForm = () => {
   const searchParams = useSearchParams();
   const email = searchParams.get('email');
   const axiosPublic = useAxiosPublic();
@@ -16,7 +17,6 @@ const ResetPassword = () => {
   
   const { register, handleSubmit, watch, formState: { errors } } = useForm();
   
-  // পাসওয়ার্ড ম্যাচ করার জন্য watch ব্যবহার করা
   const password = watch("newPassword");
 
   const onSubmit = async (data: any) => {
@@ -104,4 +104,17 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+// ২. মেইন এক্সপোর্ট যা Suspense Boundary নিশ্চিত করে
+const ResetPasswordPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader2 className="animate-spin text-[#86B1AA]" size={40} />
+      </div>
+    }>
+      <ResetPasswordForm />
+    </Suspense>
+  );
+};
+
+export default ResetPasswordPage;
