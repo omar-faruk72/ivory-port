@@ -32,7 +32,7 @@ const GalleryPage = () => {
   const secondRow = images.slice(5, 10);
 
   return (
-    <div className="bg-white min-h-screen pb-20">
+    <div className="bg-white  pb-20">
       {/* Header Section */}
       <div className="max-w-7xl mx-auto px-6 py-16">
         <h2 className="text-[#7AB7A9] text-2xl font-semibold mb-4">Our Gallery</h2>

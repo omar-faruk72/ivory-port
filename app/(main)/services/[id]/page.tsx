@@ -30,7 +30,7 @@ const SingleServicePage = () => {
     queryKey: ['service', id],
     queryFn: async () => {
       // আপনার এন্ডপয়েন্ট অনুযায়ী ইউআরএলটি চেক করে নিন (যেমন: /service/id)
-      const res = await axiosPublic.get(`/services/${id}`);
+      const res = await axiosPublic.get(`/services/services/${id}`);
       return res.data.data;
     },
     enabled: !!id, // আইডি থাকলে তবেই কুয়েরি চলবে
